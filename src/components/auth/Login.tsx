@@ -1,32 +1,38 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-export default function Login() {
-  const [username, setUsername] = useState("");
+type Props = {
+  setAction: React.Dispatch<React.SetStateAction<string>>;
+  login: (email: string, password: string) => void;
+};
+
+export default function Login({ setAction, login }: Props) {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   useEffect(() => {
-    const empty = username.trim() === "" || password.trim() === "";
+    const empty = email.trim() === "" || password.trim() === "";
     setButtonDisabled(empty);
-  }, [username, password]);
-
-  const login = () => {
-    console.log(username, password);
-  };
+  }, [email, password]);
 
   return (
     <div className="p-5 md:border-2 rounded-lg md:border-indigo-600 w-full md:w-fit md:max-w-[50%] md:max-h-screen overflow-auto">
-      <h1 className="font-bold text-2xl text-indigo-600 text-center mb-2">
-        Login
-      </h1>
+      <div className="mb-2 flex relative items-center justify-center">
+        <Link to="/" className="absolute left-0">
+          <span className="text-3xl">&laquo;</span>
+        </Link>
+        <h1 className="font-bold text-2xl text-indigo-600">Login</h1>
+      </div>
       <div className="">
         <div className="mb-2">
           <p className="font-bold mb-1 text-indigo-600">Email</p>
           <input
             type="email"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full text-xl px-2 py-1 rounded border border-indigo-400"
+            required
             autoFocus
           />
         </div>
@@ -37,11 +43,12 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full text-xl px-2 py-1 rounded border border-indigo-400"
+            required
           />
         </div>
         <div className="mb-2 mt-3">
           <button
-            onClick={login}
+            onClick={() => login(email, password)}
             disabled={buttonDisabled}
             className="rounded-md px-2 py-1 w-full overflow-hidden relative group cursor-pointer border-2 font-medium border-indigo-600 text-indigo-600"
           >
@@ -49,9 +56,9 @@ export default function Login() {
               Login
             </span>
           </button>
-          <a href="/register" className="inline-block mt-2">
-            <span>Register</span>
-          </a>
+          <button onClick={() => setAction("register")} className="mt-2">
+            Register
+          </button>
         </div>
       </div>
     </div>
