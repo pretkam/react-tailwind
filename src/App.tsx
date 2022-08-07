@@ -1,31 +1,17 @@
-import { useContext, useEffect, useState } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Link,
-  Navigate,
-  matchRoutes,
-  useLocation,
-} from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // components
+import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Products from "./pages/Products";
 import TestProtectedPage from "./pages/TestProtectedPage";
 import Sidebar from "./components/web/Sidebar";
 
-export type emtyObj = Record<string, never>;
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
 // user context
-import UserContext from "./context/userContext";
+import UserContext, { User, emtyObj } from "./context/userContext";
 
-// get user
+// get local user
 let localUser = {};
 try {
   const data = JSON.parse(localStorage.getItem("user") || "{}");
@@ -102,6 +88,22 @@ function App() {
                     </Protected>
                   }
                 />
+                <Route
+                  path="create"
+                  element={
+                    <Protected>
+                      <Products />
+                    </Protected>
+                  }
+                />
+                <Route
+                  path="edit/:id"
+                  element={
+                    <Protected>
+                      <Products />
+                    </Protected>
+                  }
+                />
               </Route>
               <Route path="*" element={<>Page not found...</>} />
             </Routes>
@@ -111,36 +113,5 @@ function App() {
     </UserContext.Provider>
   );
 }
-
-const Home = () => {
-  const { user, setUser } = useContext(UserContext);
-
-  return (
-    <div className="flex flex-col items-center justify-center w-full h-screen p-10">
-      <h1 className="font-bold text-6xl tracking-widest break-all">
-        Hello {user.name || "..."}
-      </h1>
-      {!user.id ? (
-        <Link to={"/auth"}>
-          <button className="px-2 py-1 font-semibold text-xl border-2 border-indigo-500 rounded mt-2">
-            Login / Register
-          </button>
-        </Link>
-      ) : (
-        <div className="flex mt-2">
-          <button
-            onClick={() => {
-              setUser({});
-              localStorage.removeItem("user");
-            }}
-            className="px-2 py-1 font-semibold text-xl border-2 border-indigo-500 rounded mt-2"
-          >
-            Logout
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
 
 export default App;

@@ -1,15 +1,21 @@
 import { Link } from "react-router-dom";
 import { Product } from "../../pages/Products";
 
-export default function ProductTable({
-  products,
-}: {
+interface Props {
   products: Product[] | [];
-}) {
+  deleteProduct: (id: string) => void;
+}
+
+export default function ProductTable({ products, deleteProduct }: Props) {
   let no = 1;
   return (
     <div className="px-5">
-      <p className="text-center mb-2 font-bold text-lg">Products table</p>
+      <div className="flex justify-between">
+        <p className="mb-2 font-bold text-lg">Products table</p>
+        <Link to="/product/create">
+          <button className="px-1 border">➕</button>
+        </Link>
+      </div>
       <table className="w-full">
         <thead className="border-b">
           <tr>
@@ -24,16 +30,21 @@ export default function ProductTable({
         <tbody>
           {products.map((product: Product) => (
             <tr className="border-b" key={product.id}>
-              <td className="font-bold text-center">{no++}</td>
+              <td className="font-bold text-center border-r">{no++}</td>
               <td className="font-bold text-center">{product.kode}</td>
               <td>{product.name}</td>
               <td className="text-right">{product.price}</td>
               <td className="text-right">{product.qty}</td>
               <td className="text-center">
-                <Link to={"/product/" + product.id + "/edit"}>
+                <Link to={"/product" + "/edit/" + product.id}>
                   <button className="border px-1 m-1">✏️</button>
                 </Link>
-                <button className="border px-1">❌</button>
+                <button
+                  className="border px-1"
+                  onClick={() => deleteProduct(product.id)}
+                >
+                  ❌
+                </button>
               </td>
             </tr>
           ))}

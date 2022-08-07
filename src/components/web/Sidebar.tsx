@@ -19,14 +19,16 @@ export default function Sidebar({ logout, mdMenu = false }: any) {
     <Link to={menu.path} className="w-full">
       <button
         className={
-          (pathname === menu.path ? "bg-indigo-300" : "") +
-          " mb-2 p-2 border border-indigo-300 w-full text-left"
+          (pathname.split("/")[1] === menu.path.replace("/", "")
+            ? "bg-indigo-300"
+            : "") + " mb-2 p-2 border border-indigo-300 w-full text-left"
         }
       >
         <span
           className={
-            (pathname === menu.path ? "text-white" : "") +
-            " font-semibold text-xl"
+            ((pathname.split("/")[1] || "/") === menu.path.replace("/", "")
+              ? "text-white"
+              : "") + " font-semibold text-xl"
           }
         >
           {menu.text}

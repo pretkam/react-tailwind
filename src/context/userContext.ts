@@ -1,5 +1,12 @@
 import React, { createContext } from "react";
-import { emtyObj, User } from "../App";
+
+export type emtyObj = Record<string, never>;
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 
 interface userContext {
   user: User | emtyObj;
